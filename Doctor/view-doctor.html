@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Doctor Details</title>
+    <link rel="stylesheet" href="styles/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #3a3a3a;
+            color: white;
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .container {
+            width: 100%;
+        }
+        .image-preview {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Doctor Details</h1>
+        <img id="doctor-image" class="image-preview" alt="Doctor Image">
+        <p><strong>Name:</strong> <span id="doctor-name"></span></p>
+        <p><strong>Email:</strong> <span id="doctor-email"></span></p>
+        <p><strong>CNIC:</strong> <span id="doctor-cnic"></span></p>
+        <p><strong>Phone:</strong> <span id="doctor-phone"></span></p>
+        <p><strong>Cell:</strong> <span id="doctor-cell"></span></p>
+        <p><strong>Address:</strong> <span id="doctor-address"></span></p>
+        <p><strong>Notes:</strong> <span id="doctor-notes"></span></p>
+        <p><strong>Specialization:</strong> <span id="doctor-specialization"></span></p>
+        <button id="close-btn" class="btn btn-primary">Close</button>
+    </div>
+    <script>
+        const { ipcRenderer } = require('electron');
+
+        ipcRenderer.on('doctor-details', (event, doctor) => {
+            document.getElementById('doctor-image').src = doctor.image_path;
+            document.getElementById('doctor-name').textContent = doctor.name;
+            document.getElementById('doctor-email').textContent = doctor.email;
+            document.getElementById('doctor-cnic').textContent = doctor.cnic;
+            document.getElementById('doctor-phone').textContent = doctor.phone;
+            document.getElementById('doctor-cell').textContent = doctor.cell;
+            document.getElementById('doctor-address').textContent = doctor.address;
+            document.getElementById('doctor-notes').textContent = doctor.notes;
+            document.getElementById('doctor-specialization').textContent = doctor.specialization;
+        });
+
+        document.getElementById('close-btn').addEventListener('click', () => {
+            window.close();
+        });
+    </script>
+</body>
+</html>

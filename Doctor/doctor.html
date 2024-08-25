@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Doctors</title>
+    <link rel="stylesheet" href="../style/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #2f2f2f;
+            /* Dark gray background */
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            margin-top: 50px;
+        }
+
+        .btn-add {
+            background-color: #007bff;
+            /* Blue */
+            color: white;
+            border: none;
+            margin-bottom: 20px;
+        }
+
+        .btn-add:hover {
+            filter: brightness(1.1);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th,
+        td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #007bff;
+        }
+
+        td {
+            background-color: #3a3a3a;
+        }
+
+        .image-preview {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+
+        .btn-view {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-view:hover {
+            filter: brightness(1.1);
+        }
+
+        .btn-delete {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-delete:hover {
+            filter: brightness(1.1);
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .add-btn,
+        .back-btn {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+        }
+
+        .add-btn {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .back-btn {
+            background-color: #555;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Doctors</h1>
+        <div class="button-container">
+            <button id="add-btn" class="btn btn-add btn-lg">Add New Doctor</button>
+            <button class="back-btn" id="back">Back</button>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Specialization</th>
+                    <th>Image</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="doctors-list">
+                <!-- Doctor rows will be dynamically added here -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        window.$ = window.jQuery = require('jquery');
+    </script>
+    <script>
+        const { ipcRenderer } = require('electron');
+
+        ipcRenderer.on('show-notification', (event, { title, body }) => {
+            new Notification(title, { body });
+        });
+        // Function to open the add doctor form
+        document.getElementById('add-btn').addEventListener('click', () => {
+            ipcRenderer.send('open-add-doctor-dialog');
+        });
+
+        // Load doctors when the page is ready
+        window.onload = () => {
+            ipcRenderer.send('get-doctors');
+        };
+
+        // Populate the table with doctor data
+        ipcRenderer.on('doctors-data', (event, doctors) => {
+            const doctorsList = document.getElementById('doctors-list');
+            doctorsList.innerHTML = ''; // Clear any existing rows
+
+            doctors.forEach(doctor => {
+                const row = document.createElement('tr');
+
+                const idCell = document.createElement('td');
+                idCell.textContent = doctor.id;
+                row.appendChild(idCell);
+
+                const nameCell = document.createElement('td');
+                nameCell.textContent = doctor.name;
+                row.appendChild(nameCell);
+
+                const emailCell = document.createElement('td');
+                emailCell.textContent = doctor.email;
+                row.appendChild(emailCell);
+
+                const phoneCell = document.createElement('td');
+                phoneCell.textContent = doctor.phone;
+                row.appendChild(phoneCell);
+
+                const specializationCell = document.createElement('td');
+                specializationCell.textContent = doctor.specialization;
+                row.appendChild(specializationCell);
+
+                const imageCell = document.createElement('td');
+                const img = document.createElement('img');
+                img.src = doctor.image_path;
+                img.className = 'image-preview';
+                imageCell.appendChild(img);
+                row.appendChild(imageCell);
+
+                const actionsCell = document.createElement('td');
+                const viewButton = document.createElement('button');
+                viewButton.textContent = 'View';
+                viewButton.className = 'btn btn-view';
+                viewButton.addEventListener('click', () => {
+                    ipcRenderer.send('view-doctor', doctor.id);
+                });
+                actionsCell.appendChild(viewButton);
+
+                const deleteButton = document.createElement('button');
+                deleteButton.textContent = 'Delete';
+                deleteButton.className = 'btn btn-delete';
+                deleteButton.addEventListener('click', () => {
+                    if (confirm('Are you sure you want to delete this doctor?')) {
+                        ipcRenderer.send('delete-doctor', doctor.id);
+                    }
+                });
+                actionsCell.appendChild(deleteButton);
+
+                row.appendChild(actionsCell);
+                doctorsList.appendChild(row);
+            });
+        });
+
+        ipcRenderer.on('doctor-deleted', () => {
+            ipcRenderer.send('get-doctors');
+        });
+
+        ipcRenderer.on('refresh-doctor-list', () => {
+            ipcRenderer.send('get-doctors');
+        });
+        // Logic to go back to the previous page
+        
+        document.getElementById('back').addEventListener('click', () => {
+            window.history.back();
+        });
+    </script>
+</body>
+
+</html>

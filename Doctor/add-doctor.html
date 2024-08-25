@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add New Doctor</title>
+    <link rel="stylesheet" href="../style/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #3a3a3a;
+            color: white;
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h2>Add New Doctor</h2>
+    <form id="add-doctor-form">
+        <div class="form-group">
+            <label for="doctor-name">Name</label>
+            <input type="text" class="form-control" id="doctor-name" required>
+        </div>
+        <div class="form-group">
+            <label for="doctor-email">Email</label>
+            <input type="email" class="form-control" id="doctor-email" required>
+        </div>
+        <div class="form-group">
+            <label for="doctor-cnic">CNIC</label>
+            <input type="text" class="form-control" id="doctor-cnic" >
+        </div>
+        <div class="form-group">
+            <label for="doctor-phone">Phone Number</label>
+            <input type="text" class="form-control" id="doctor-phone">
+        </div>
+        <div class="form-group">
+            <label for="doctor-cell">Cell Number</label>
+            <input type="text" class="form-control" id="doctor-cell">
+        </div>
+        <div class="form-group">
+            <label for="doctor-address">Address</label>
+            <textarea class="form-control" id="doctor-address" rows="3"></textarea>
+        </div>
+        <div class="form-group">
+            <label for="doctor-notes">Notes</label>
+            <textarea class="form-control" id="doctor-notes" rows="3"></textarea>
+        </div>
+        <div class="form-group">
+            <label for="doctor-specialization">Specialization</label>
+            <input type="text" class="form-control" id="doctor-specialization" required>
+        </div>
+        <div class="form-group">
+            <label for="doctor-image">Upload Image</label>
+            <input type="file" class="form-control-file" id="doctor-image" accept="image/*">
+        </div>
+        <button type="submit" class="btn btn-primary">Add Doctor</button>
+    </form>
+
+    <script>
+        window.$ = window.jQuery = require('jquery');
+    </script>
+    <script>
+        const { ipcRenderer } = require('electron');
+
+        // Handle form submission
+        document.getElementById('add-doctor-form').addEventListener('submit', (event) => {
+            event.preventDefault();
+            var image = document.getElementById('doctor-image').files[0];
+            const doctorData = {
+                name: document.getElementById('doctor-name').value,
+                email: document.getElementById('doctor-email').value,
+                cnic: document.getElementById('doctor-cnic').value,
+                phone: document.getElementById('doctor-phone').value,
+                cell: document.getElementById('doctor-cell').value,
+                address: document.getElementById('doctor-address').value,
+                notes: document.getElementById('doctor-notes').value    ,
+                specialization: document.getElementById('doctor-specialization').value,
+                imageName:image?.name, // File object
+                imagePath: image?.path, // File object
+            };
+
+            ipcRenderer.send('add-doctor', doctorData);
+            window.close();
+        });
+    </script>
+</body>
+</html>

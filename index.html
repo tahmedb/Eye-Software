@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Main Page</title>
+    <link rel="stylesheet" href="style/css/bootstrap.min.css">
+    <style>
+        .main-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f0f8ff;
+        }
+        .btn-container {
+            margin: 20px 0;
+            width: 100%;
+            text-align: center;
+        }
+        .btn-lg {
+            padding: 20px 40px;
+            font-size: 24px;
+            width: 300px;
+            transition: transform 0.2s ease-in-out;
+        }
+        .btn-lg:hover {
+            transform: scale(1.05);
+        }
+        body {
+            background-color: #2f2f2f; /* Dark gray background */
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+        .main-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+        .btn-container {
+            margin: 20px 0;
+            width: 100%;
+            text-align: center;
+        }
+        .btn-lg {
+            padding: 20px 40px;
+            font-size: 24px;
+            width: 300px;
+            color: white;
+            border: none;
+            transition: transform 0.2s ease-in-out;
+        }
+        .btn-lg:hover {
+            transform: scale(1.05);
+            filter: brightness(1.1);
+        }
+        #add-doctor-btn {
+            background-color: #007bff; /* Blue */
+        }
+        #add-opd-btn {
+            background-color: #28a745; /* Green */
+        }
+        #add-surgery-btn {
+            background-color: #dc3545; /* Red */
+        }
+        #reports-btn {
+            background-color: #ffc107; /* Yellow */
+            color: black;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <h1 class="mb-5">Main Menu</h1>
+        <div class="btn-container">
+            <button id="add-doctor-btn" class="btn btn-primary btn-lg">Doctors</button>
+        </div>
+        <div class="btn-container">
+            <button id="add-opd-btn" class="btn btn-success btn-lg">OPD</button>
+        </div>
+        <div class="btn-container">
+            <button id="add-surgery-btn" class="btn btn-danger btn-lg">Surgery</button>
+        </div>
+        <div class="btn-container">
+            <button id="reports-btn" class="btn btn-warning btn-lg">Reports</button>
+        </div>
+    </div>
+    <script src="renderer.js"></script>
+</body>
+</html>

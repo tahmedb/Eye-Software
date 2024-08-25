@@ -1,0 +1,29 @@
+{
+  "name": "eye-software",
+  "version": "1.0.0",
+  "description": "Software to record eye opd and surgery info",
+  "main": "main.js",
+  "scripts": {
+    "test": "test",
+    "start": "electron ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "simple-eye-clinic"
+  },
+  "keywords": [
+    "eye",
+    "software"
+  ],
+  "author": "Toufique Ahmed",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^31.4.0"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "bootstrap": "^5.3.3",
+    "jquery": "^3.7.1",
+    "sqlite3": "^5.1.7"
+  }
+}
